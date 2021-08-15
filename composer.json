@@ -10,6 +10,7 @@
         }
     ],
     "require": {
+        "guzzlehttp/guzzle": "^7.3",
         "everyworkflow/core-bundle": "dev-main"
     },
     "autoload": {
