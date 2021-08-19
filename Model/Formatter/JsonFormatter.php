@@ -16,9 +16,9 @@ class JsonFormatter extends ArrayFormatter implements JsonFormatterInterface
 {
     protected LoggerInterface $logger;
 
-    public function __construct(LoggerInterface $ewRemoteLogger)
+    public function __construct(LoggerInterface $ewRemoteErrorLogger)
     {
-        $this->logger = $ewRemoteLogger;
+        $this->logger = $ewRemoteErrorLogger;
     }
 
     public function handle(mixed $rawResponse): mixed

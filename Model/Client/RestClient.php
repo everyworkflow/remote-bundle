@@ -13,6 +13,7 @@ use EveryWorkflow\RemoteBundle\Model\Formatter\ArrayFormatterInterface;
 use EveryWorkflow\RemoteBundle\Model\RemoteRequestInterface;
 use EveryWorkflow\RemoteBundle\Model\RemoteResponseInterface;
 use GuzzleHttp\Client;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use GuzzleHttp\Exception\RequestException;
 
@@ -54,7 +55,7 @@ class RestClient extends RemoteClient implements RestClientInterface
         $this->logRequest($request);
 
         if (!$this->responseHandler) {
-            throw new \Exception('Response not found.');
+            throw new \Exception('Response handler not found.');
         }
 
         try {
@@ -65,6 +66,10 @@ class RestClient extends RemoteClient implements RestClientInterface
             );
         } catch (RequestException $e) {
             $rawResponse = $e->getResponse();
+            if (!$rawResponse) {
+                throw new \Exception('Response Error: ' . $e->getMessage());
+            }
+            $this->logRowResponse($request, $rawResponse);
         }
 
         $arrayResponse = $this->formatter->handle($rawResponse);
@@ -92,7 +97,7 @@ class RestClient extends RemoteClient implements RestClientInterface
             strtoupper($request->getMethod()) .
             ': ' .
             $this->getUrlFromUri($request) .
-            ' || ' .
+            ' || Options: ' .
             json_encode($options, 1)
         );
     }
@@ -103,7 +108,25 @@ class RestClient extends RemoteClient implements RestClientInterface
             'Response: ' .
             $request->getRequestKey() .
             ' || ' .
+            strtoupper($request->getMethod()) .
+            ': ' .
+            $this->getUrlFromUri($request) .
+            ' || Content: ' .
             json_encode($response->toArray(), 1)
+        );
+    }
+
+    protected function logRowResponse(RemoteRequestInterface $request, ResponseInterface $response): void
+    {
+        $this->logger->info(
+            'Response Error: ' .
+            $request->getRequestKey() .
+            ' || ' .
+            strtoupper($request->getMethod()) .
+            ': ' .
+            $this->getUrlFromUri($request) .
+            ' || StatusCode: ' .
+            $rawResponse->getStatusCode()
         );
     }
 }
