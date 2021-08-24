@@ -126,7 +126,7 @@ class RestClient extends RemoteClient implements RestClientInterface
             ': ' .
             $this->getUrlFromUri($request) .
             ' || StatusCode: ' .
-            $rawResponse->getStatusCode()
+            $response->getStatusCode()
         );
     }
 }
