@@ -13,7 +13,5 @@ use EveryWorkflow\RemoteBundle\Model\RemoteResponseInterface;
 
 interface RemoteClientInterface
 {
-    public function setResponseHandler(RemoteResponseInterface $responseHandler): self;
-
     public function send(RemoteRequestInterface $request): RemoteResponseInterface;
 }

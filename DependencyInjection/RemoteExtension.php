@@ -27,7 +27,7 @@ class RemoteExtension extends Extension
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.php');
 
-        $container->registerForAutoconfiguration(RemoteRequestInterface::class)->setShared(false);
-        $container->registerForAutoconfiguration(RemoteResponseInterface::class)->setShared(false);
+        $container->registerForAutoconfiguration(RemoteRequestInterface::class)->setShared(false)->setPublic(true);
+        $container->registerForAutoconfiguration(RemoteResponseInterface::class)->setShared(false)->setPublic(true);
     }
 }

@@ -19,15 +19,16 @@ use GuzzleHttp\Exception\RequestException;
 
 class RestClient extends RemoteClient implements RestClientInterface
 {
+    protected ?RemoteResponseInterface $responseHandler = null;
+
     protected Client $client;
 
     public function __construct(
-        RemoteResponseInterface $responseHandler,
-        LoggerInterface         $ewRemoteLogger,
         ArrayFormatterInterface $formatter,
+        LoggerInterface         $ewRemoteLogger,
         array                   $config = []
     ) {
-        parent::__construct($responseHandler, $ewRemoteLogger, $formatter);
+        parent::__construct($formatter, $ewRemoteLogger);
         $this->client = new Client($config);
     }
 
@@ -50,6 +51,12 @@ class RestClient extends RemoteClient implements RestClientInterface
         ];
     }
 
+    public function setResponseHandler(RemoteResponseInterface $remoteResponse): self
+    {
+        $this->responseHandler = $remoteResponse;
+        return $this;
+    }
+
     public function send(RemoteRequestInterface $request): RemoteResponseInterface
     {
         $this->logRequest($request);
@@ -59,24 +66,25 @@ class RestClient extends RemoteClient implements RestClientInterface
         }
 
         try {
-            $rawResponse = $this->client->request(
+            $response = $this->client->request(
                 $request->getMethod(),
                 $this->getUrlFromUri($request),
                 $this->getOptions($request)
             );
         } catch (RequestException $e) {
-            $rawResponse = $e->getResponse();
-            if (!$rawResponse) {
+            $response = $e->getResponse();
+            if (!$response) {
                 throw new \Exception('Response Error: ' . $e->getMessage());
             }
-            $this->logRowResponse($request, $rawResponse);
+            $this->logRowResponse($request, $response);
         }
 
-        $arrayResponse = $this->formatter->handle($rawResponse);
+        $statusCode = $response->getStatusCode();
+        $formattedResponse = $this->formatter->handle($response);
         $response = $this->responseHandler
-            ->setStatusCode($rawResponse->getStatusCode())
+            ->setStatusCode($statusCode)
             ->setRequest($request)
-            ->handle($arrayResponse);
+            ->handle($formattedResponse);
 
         $this->logResponse($request, $response);
 

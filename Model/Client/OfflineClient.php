@@ -21,13 +21,12 @@ class OfflineClient extends RemoteClient implements OfflineClientInterface
     protected KernelInterface $kernel;
 
     public function __construct(
-        RemoteResponseInterface $responseHandler,
-        LoggerInterface $ewRemoteLogger,
         ArrayFormatterInterface $formatter,
+        LoggerInterface $ewRemoteLogger,
         Filesystem $filesystem,
         KernelInterface $kernel
     ) {
-        parent::__construct($responseHandler, $ewRemoteLogger, $formatter);
+        parent::__construct($formatter, $ewRemoteLogger);
         $this->filesystem = $filesystem;
         $this->kernel = $kernel;
     }

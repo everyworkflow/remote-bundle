@@ -16,36 +16,22 @@ use Psr\Log\LoggerInterface;
 
 class RemoteClient implements RemoteClientInterface
 {
-    protected RemoteResponseInterface $responseHandler;
-    protected LoggerInterface $logger;
     protected ArrayFormatterInterface $formatter;
+    protected LoggerInterface $logger;
 
     public function __construct(
-        RemoteResponseInterface $responseHandler,
-        LoggerInterface $ewRemoteLogger,
-        ArrayFormatterInterface $formatter
+        ArrayFormatterInterface $formatter,
+        LoggerInterface $ewRemoteLogger
     ) {
-        $this->responseHandler = $responseHandler;
-        $this->logger = $ewRemoteLogger;
         $this->formatter = $formatter;
-    }
-
-    public function setResponseHandler(RemoteResponseInterface $responseHandler): self
-    {
-        $this->responseHandler = $responseHandler;
-        return $this;
+        $this->logger = $ewRemoteLogger;
     }
 
     public function send(RemoteRequestInterface $request): RemoteResponseInterface
     {
         $this->logRequest($request);
-
-        if (!$this->responseHandler) {
-            throw new \Exception('ResponseHandler not found.');
-        }
-
-        $response = $this->responseHandler->setRequest($request)
-            ->handle($this->formatter->handle($request->toArray()));
+        
+        $response = $this->formatter->handle($request->toArray());
 
         $this->logResponse($request, $response);
 

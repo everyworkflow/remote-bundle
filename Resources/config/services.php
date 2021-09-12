@@ -13,6 +13,7 @@ use EveryWorkflow\RemoteBundle\Model\Formatter\ArrayFormatter;
 use EveryWorkflow\RemoteBundle\Model\Formatter\ArrayFormatterInterface;
 use EveryWorkflow\RemoteBundle\Model\Formatter\JsonFormatter;
 use EveryWorkflow\RemoteBundle\Model\Formatter\JsonFormatterInterface;
+use EveryWorkflow\RemoteBundle\Model\RemoteService;
 
 return function (ContainerConfigurator $configurator) {
     /** @var DefaultsConfigurator $services */
@@ -35,7 +36,10 @@ return function (ContainerConfigurator $configurator) {
         ->arg('$formatter', service(JsonFormatter::class))
         ->arg('$config', ['connect_timeout' => 120.0]);
 
-    $services->set(RemoteClientInterface::class, service(RemoteClient::class))
+    $services->set(RemoteClient::class)
         ->arg('$ewRemoteLogger', service('monolog.logger.ew_remote'))
         ->tag('monolog.logger', ['channel' => 'ew_remote']);
+
+    $services->set(RemoteService::class)
+        ->arg('$client', service(RestClient::class));
 };

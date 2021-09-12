@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace EveryWorkflow\RemoteBundle\Model;
 
 use EveryWorkflow\RemoteBundle\Model\Client\RemoteClientInterface;
+use EveryWorkflow\RemoteBundle\Model\Client\RestClientInterface;
 
 class RemoteService implements RemoteServiceInterface
 {
@@ -61,7 +62,9 @@ class RemoteService implements RemoteServiceInterface
 
     public function send(): RemoteResponseInterface
     {
-        return $this->client
+        /** @var RestClientInterface $restClient */
+        $restClient = $this->client;
+        return $restClient
             ->setResponseHandler($this->getResponseHandler())
             ->send($this->getRequest());
     }

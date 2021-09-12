@@ -40,7 +40,7 @@ class RemoteResponse extends DataObject implements RemoteResponseInterface
 
     public function handle(array $responseData): self
     {
-        $this->data = array_merge($this->data, $responseData);
+        $this->data = $responseData;
         return $this;
     }
 }

@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace EveryWorkflow\RemoteBundle\Model\Formatter;
 
-use EveryWorkflow\RemoteBundle\Model\RemoteResponseInterface;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
 
