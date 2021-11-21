@@ -10,6 +10,7 @@ namespace EveryWorkflow\RemoteBundle;
 
 use EveryWorkflow\RemoteBundle\DependencyInjection\RemoteExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class EveryWorkflowRemoteBundle extends Bundle
@@ -22,7 +23,7 @@ class EveryWorkflowRemoteBundle extends Bundle
         parent::build($container);
     }
 
-    public function getContainerExtension()
+    public function getContainerExtension(): ?ExtensionInterface
     {
         return new RemoteExtension();
     }
