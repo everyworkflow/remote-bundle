@@ -44,11 +44,15 @@ class RestClient extends RemoteClient implements RestClientInterface
 
     protected function getOptions(RemoteRequestInterface $request): array
     {
-        return [
+        $request = [
             'headers' => [
                 'Accept' => 'application/json',
             ],
         ];
+        if ($request->getBody() && is_array($request->getBody())) {
+            $request['body'] = json_encode($request->getBody(), 1);
+        }
+        return $request;
     }
 
     public function setResponseHandler(RemoteResponseInterface $remoteResponse): self
