@@ -18,6 +18,8 @@ interface RemoteRequestInterface extends DataObjectInterface
     public const KEY_URI = 'uri';
     public const KEY_METHOD = 'method';
     public const KEY_BODY = 'body';
+    public const KEY_JSON = 'json';
+    public const KEY_OPTIONS = 'options';
     public const KEY_REQUEST_KEY = 'request_key';
 
     public function setMethod(string $method): self;
@@ -35,4 +37,12 @@ interface RemoteRequestInterface extends DataObjectInterface
     public function setBody(array $body): self;
 
     public function getBody(): array;
+
+    public function setJson(array $json): self;
+
+    public function getJson(): array;
+
+    public function setOptions(array $options): self;
+
+    public function getOptions(): array;
 }

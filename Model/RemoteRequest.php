@@ -63,6 +63,28 @@ class RemoteRequest extends DataObject implements RemoteRequestInterface
 
     public function getBody(): array
     {
-        return $this->getData(self::KEY_BODY);
+        return $this->getData(self::KEY_BODY) ?? [];
+    }
+
+    public function setJson(array $json): self
+    {
+        $this->setData(self::KEY_JSON, $json);
+        return $this;
+    }
+
+    public function getJson(): array
+    {
+        return $this->getData(self::KEY_JSON) ?? [];
+    }
+
+    public function setOptions(array $options): self
+    {
+        $this->setData(self::KEY_OPTIONS, $options);
+        return $this;
+    }
+
+    public function getOptions(): array
+    {
+        return $this->getData(self::KEY_OPTIONS) ?? [];
     }
 }
